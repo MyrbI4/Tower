@@ -85,7 +85,7 @@ while True:
       "Battery undervoltage warning", #12
       "Battery overvoltage",          #13
       "Battery over-discharge"]		  #14
-    for id in range(len(thirdidslave)):          #Опрос контроллеров заряда
+    for id in range(len(thirdidslave)):                                                       #Опрос контроллеров заряда
         thirdresult = Thethirdclient.read_holding_registers(256, 35, slave=thirdidslave[id])  #Снимаем регистры
         modeoffset = 0                                                                        #Проверка режима зарядки
         loadstatus = False
