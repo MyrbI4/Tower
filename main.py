@@ -125,8 +125,8 @@ while True:
         BatteryCap = thirdresult.registers[0]                                                  #Емкость аккумулятора
         BatteryVolt = round(thirdresult.registers[1] * 0.1, 2)                                 #Напряжение аккумулятора
         ChargingCurr = thirdresult.registers[2] * 0.01                                         #Ток зарядки
-        ControllerTemp = getRealTemp(int(hex(thirdresult.registers[3])[2:-2], 16))             #Температура контроллера
-        BatteryTemp = getRealTemp(int(hex(thirdresult.registers[3])[-2:], 16))                 #Температура аккумулятора
+        ControllerTemp = getRealTemp(int(hex(thirdresult.registers[3])[2:4], 16))             #Температура контроллера
+        BatteryTemp = getRealTemp(int(hex(thirdresult.registers[3])[4:6], 16))                 #Температура аккумулятора
         LoadVolt = round(thirdresult.registers[4] * 0.1, 2)                                    #Напряжение постоянного тока нагрузки
         LoadCurr = thirdresult.registers[5] * 0.01                                             #Постоянный ток нагрузки
         LoadPower = thirdresult.registers[6]                                                   #Мощность нагрузки постоянного тока
