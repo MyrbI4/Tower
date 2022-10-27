@@ -12,7 +12,7 @@ firstidslave = 1
 secondlidslave = [1, 2]
 thirdidslave = [1, 5, 6, 7, 11, 12]
 
-#IP адреса преобразователей протоколf Modbus RTU/ASCII в Modbus TCP
+#IP адреса преобразователей протокол Modbus RTU/ASCII в Modbus TCP
 Thefirstclient = ModbusTcpClient('192.168.1.11', port=502, framer=ModbusRtuFramer)  #Метеостанция
 Thesecondclient = ModbusTcpClient("192.168.1.12", port=503, framer=ModbusRtuFramer)  #PZEM подключенные к ветрогенераторам
 Thethirdclient = ModbusTcpClient('192.168.1.12', port=502, framer=ModbusRtuFramer)  #Контроллеры заряда SRNE
