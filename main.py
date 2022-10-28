@@ -38,22 +38,22 @@ while True:
     QuartzFreq = float(result.registers[30] + (result.registers[31] << 16))/100                        #Частота кварца
     print("The First client")                                                                          #Для отладки
     print("Meteostation")
-    print("AverageTemp:\t" + AverageTemp + "°C")                                                          #Для отладки вывод значений
-    print("AveragePressure:\t" + AveragePressure + "Pa")
-    print("Averagehumidity:\t" + Averagehumidity + "%")
-    print("AverageWindspeed:\t" + AverageWindspeed + "meters per second")
-    print("AverageWinddirection:\t" + AverageWinddirection + "°")
-    print("MaxWindspeed:\t" + MaxWindspeed + "meters per second")
-    print("Recipitation:\t" + Recipitation)
-    print("CurrentTemp:\t" + CurrentTemp + "°C")
-    print("CurrentPressure:\t" + CurrentPressure + "Pa")
-    print("CurrentRecipitation:\t" + CurrentRecipitation)
-    print("CurrentWindspeed:\t" + CurrentWindspeed + "meters per second")
-    print("CurrentWinddirection:\t" + CurrentWinddirection + "°")
-    print("QuartzTemp:\t" + QuartzTemp + "°C")
-    print("HumiditySensorTemp:\t" + HumiditySensorTemp + "°C")
-    print("CodeTemp:\t" + CodeTemp)
-    print("QuartzFreq:\t" + QuartzFreq + "Hz")
+    print("AverageTemp:\t" + str(AverageTemp) + "°C")                                                          #Для отладки вывод значений
+    print("AveragePressure:\t" + str(AveragePressure) + "Pa")
+    print("Averagehumidity:\t" + str(Averagehumidity) + "%")
+    print("AverageWindspeed:\t" + str(AverageWindspeed) + "meters per second")
+    print("AverageWinddirection:\t" + str(AverageWinddirection) + "°")
+    print("MaxWindspeed:\t" + str(MaxWindspeed) + "meters per second")
+    print("Recipitation:\t" + str(Recipitation))
+    print("CurrentTemp:\t" + str(CurrentTemp) + "°C")
+    print("CurrentPressure:\t" + str(CurrentPressure) + "Pa")
+    print("CurrentRecipitation:\t" + str(CurrentRecipitation))
+    print("CurrentWindspeed:\t" + str(CurrentWindspeed) + "meters per second")
+    print("CurrentWinddirection:\t" + str(CurrentWinddirection) + "°")
+    print("QuartzTemp:\t" + str(QuartzTemp) + "°C")
+    print("HumiditySensorTemp:\t" + str(HumiditySensorTemp) + "°C")
+    print("CodeTemp:\t" + str(CodeTemp))
+    print("QuartzFreq:\t" + str(QuartzFreq) + "Hz")
     time.sleep(2)                                                                                      #Задержка,для протокола Modbus необходима 2-3 секунды между сообщениями иначе ошибка "Отстуствие ответа"(в симуляторе работает без нее,на прототипе нужна проверка)
 
     #PZEM "192.168.1.12", port=503
@@ -63,9 +63,9 @@ while True:
         amperage = secresult.registers[1]/100                                                          #Ток
         power = (secresult.registers[2] + secresult.registers[3] << 16)/10                             #Мощность
         print("The Second client", "ID device = ", secondlidslave[id])                                 #Вывод опрашиваемого датчика
-        print("PZEM Voltage:\t" + voltage + "V")                                                       #Значения(Вывод для отладки)
-        print("PZEM Amperage:\t" + amperage + "A")
-        print("PZEM Power:\t" + power + "W")
+        print("PZEM Voltage:\t" + str(voltage) + "V")                                                       #Значения(Вывод для отладки)
+        print("PZEM Amperage:\t" + str(amperage) + "A")
+        print("PZEM Power:\t" + str(power) + "W")
         time.sleep(2)                                                                                  #Задержка,для протокола Modbus необходима 2-3 секунды между сообщениями иначе ошибка "Отстуствие ответа"(в симуляторе работает без нее,на прототипе нужна проверка)
 
 
@@ -109,7 +109,7 @@ while True:
         elif(thirdresult.registers[32] == 6 + modeoffset):
             chargeMode = "Current limiting"
         faults = "None"                                                                       #Проверка ошибок работы контроллера заряда
-        faultID = result.registers[34]
+        faultID = thirdresult.registers[34]
         if (faultID != 0):
             faults = ""
             count = 0
