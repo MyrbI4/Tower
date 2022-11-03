@@ -20,22 +20,22 @@ Thethirdclient = ModbusTcpClient('192.168.1.12', port=502, framer=ModbusRtuFrame
 while True:
     #Метеостанция '192.168.1.11', port=502
     result = Thefirstclient.read_holding_registers (0x0050, 32, slave = firstidslave)                  #Метеостанция регистры
-    AverageTemp = float(result.registers[0] + (result.registers[1]<<16))/100                           #Температура средняя(ПТС)
-    AveragePressure = float(result.registers[2] + (result.registers[3] << 16))/100                     #Давление среднее
-    Averagehumidity = float(result.registers[4] + (result.registers[5] << 16))/100                     #Влажность средняя
-    AverageWindspeed = float(result.registers[6] + (result.registers[7] << 16))/100                    #Скорость ветра средняя
-    AverageWinddirection = float(result.registers[8] + (result.registers[9] << 16))/100                #Направление ветра среднее
-    MaxWindspeed = float(result.registers[10] + (result.registers[11] << 16))/100                      #Максимум скорости ветра
-    Recipitation = float(result.registers[12] + (result.registers[13] << 16))/100                      #Осадки
-    CurrentTemp = float(result.registers[14] + (result.registers[15] << 16))/100                       #Температура текущая(ПТС)
-    CurrentPressure = float(result.registers[16] + (result.registers[17] << 16))/100                   #Давление текущее
-    CurrentRecipitation = float(result.registers[18] + (result.registers[19] << 16))/100               #Влажность текущая
-    CurrentWindspeed = float(result.registers[20] + (result.registers[21] << 16))/100                  #Скорость ветра текущая
-    CurrentWinddirection = float(result.registers[22] + (result.registers[23] << 16))/100              #Направление ветра текущее
-    QuartzTemp = float(result.registers[24] + (result.registers[25] << 16))/100                        #Температура кварца
-    HumiditySensorTemp = float(result.registers[26] + (result.registers[27] << 16))/100                #Температура датчика влажности
-    CodeTemp = float(result.registers[28] + (result.registers[29] << 16))/100                          #Код температуры
-    QuartzFreq = float(result.registers[30] + (result.registers[31] << 16))/100                        #Частота кварца
+    AverageTemp = (result.registers[0] + (result.registers[1]<<16))/100                           #Температура средняя(ПТС)
+    AveragePressure = (result.registers[2] + (result.registers[3] << 16))/100                     #Давление среднее
+    Averagehumidity = (result.registers[4] + (result.registers[5] << 16))/100                     #Влажность средняя
+    AverageWindspeed = (result.registers[6] + (result.registers[7] << 16))/100                    #Скорость ветра средняя
+    AverageWinddirection = (result.registers[8] + (result.registers[9] << 16))/100                #Направление ветра среднее
+    MaxWindspeed = (result.registers[10] + (result.registers[11] << 16))/100                      #Максимум скорости ветра
+    Recipitation = (result.registers[12] + (result.registers[13] << 16))/100                      #Осадки
+    CurrentTemp = (result.registers[14] + (result.registers[15] << 16))/100                       #Температура текущая(ПТС)
+    CurrentPressure = (result.registers[16] + (result.registers[17] << 16))/100                   #Давление текущее
+    CurrentRecipitation = (result.registers[18] + (result.registers[19] << 16))/100               #Влажность текущая
+    CurrentWindspeed = (result.registers[20] + (result.registers[21] << 16))/100                  #Скорость ветра текущая
+    CurrentWinddirection = (result.registers[22] + (result.registers[23] << 16))/100              #Направление ветра текущее
+    QuartzTemp = (result.registers[24] + (result.registers[25] << 16))/100                        #Температура кварца
+    HumiditySensorTemp = (result.registers[26] + (result.registers[27] << 16))/100                #Температура датчика влажности
+    CodeTemp = (result.registers[28] + (result.registers[29] << 16))/100                          #Код температуры
+    QuartzFreq = (result.registers[30] + (result.registers[31] << 16))/100                        #Частота кварца
     print("The First client")                                                                          #Для отладки
     print("Meteostation")
     print("AverageTemp:\t" + str(AverageTemp) + "°C")                                                          #Для отладки вывод значений
