@@ -21,22 +21,22 @@ while True:
     try:
         # Метеостанция '192.168.1.11', port=502
         result = Thefirstclient.read_holding_registers(0x0050, 32, slave=firstidslave)          # Метеостанция регистры
-        AverageTemp = (result.registers[0] + (result.registers[1] << 16)) / 100                 # Температура средняя(ПТС)
-        AveragePressure = (result.registers[2] + (result.registers[3] << 16)) / 100             # Давление среднее
-        Averagehumidity = (result.registers[4] + (result.registers[5] << 16)) / 100             # Влажность средняя
-        AverageWindspeed = (result.registers[6] + (result.registers[7] << 16)) / 100            # Скорость ветра средняя
-        AverageWinddirection = (result.registers[8] + (result.registers[9] << 16)) / 100        # Направление ветра среднее
-        MaxWindspeed = (result.registers[10] + (result.registers[11] << 16)) / 100              # Максимум скорости ветра
-        Recipitation = (result.registers[12] + (result.registers[13] << 16)) / 100              # Осадки
-        CurrentTemp = (result.registers[14] + (result.registers[15] << 16)) / 100               # Температура текущая(ПТС)
-        CurrentPressure = (result.registers[16] + (result.registers[17] << 16)) / 100           # Давление текущее
-        CurrentRecipitation = (result.registers[18] + (result.registers[19] << 16)) / 100       # Влажность текущая
-        CurrentWindspeed = (result.registers[20] + (result.registers[21] << 16)) / 100          # Скорость ветра текущая
-        CurrentWinddirection = (result.registers[22] + (result.registers[23] << 16)) / 100      # Направление ветра текущее
-        QuartzTemp = (result.registers[24] + (result.registers[25] << 16)) / 100                # Температура кварца
-        HumiditySensorTemp = (result.registers[26] + (result.registers[27] << 16)) / 100        # Температура датчика влажности
-        CodeTemp = (result.registers[28] + (result.registers[29] << 16)) / 100                  # Код температуры
-        QuartzFreq = (result.registers[30] + (result.registers[31] << 16)) / 100                # Частота кварца
+        AverageTemp = (result.registers[0] + (result.registers[1] * 65536)) / 100                 # Температура средняя(ПТС)
+        AveragePressure = (result.registers[2] + (result.registers[3] * 65536)) / 100             # Давление среднее
+        Averagehumidity = (result.registers[4] + (result.registers[5] * 65536)) / 100             # Влажность средняя
+        AverageWindspeed = (result.registers[6] + (result.registers[7] * 65536)) / 100            # Скорость ветра средняя
+        AverageWinddirection = (result.registers[8] + (result.registers[9] * 65536)) / 100        # Направление ветра среднее
+        MaxWindspeed = (result.registers[10] + (result.registers[11] * 65536)) / 100              # Максимум скорости ветра
+        Recipitation = (result.registers[12] + (result.registers[13] * 65536)) / 100              # Осадки
+        CurrentTemp = (result.registers[14] + (result.registers[15] * 65536)) / 100               # Температура текущая(ПТС)
+        CurrentPressure = (result.registers[16] + (result.registers[17] * 65536)) / 100           # Давление текущее
+        CurrentRecipitation = (result.registers[18] + (result.registers[19] * 65536)) / 100       # Влажность текущая
+        CurrentWindspeed = (result.registers[20] + (result.registers[21] * 65536)) / 100          # Скорость ветра текущая
+        CurrentWinddirection = (result.registers[22] + (result.registers[23] * 65536)) / 100      # Направление ветра текущее
+        QuartzTemp = (result.registers[24] + (result.registers[25] * 65536)) / 100                # Температура кварца
+        HumiditySensorTemp = (result.registers[26] + (result.registers[27] * 65536)) / 100        # Температура датчика влажности
+        CodeTemp = (result.registers[28] + (result.registers[29] * 65536)) / 100                  # Код температуры
+        QuartzFreq = (result.registers[30] + (result.registers[31] * 65536)) / 100                # Частота кварца
         print("The First client")                                                               # Для отладки
         print("Meteostation")
         print("AverageTemp:\t" + str(AverageTemp) + "°C")                                       # Для отладки вывод значений
@@ -66,7 +66,7 @@ while True:
             secresult = Thesecondclient.read_input_registers(0x0000, 6, slave=secondlidslave[id])      # Считываем регистры
             voltage = secresult.registers[0] / 100  # Напряжение
             amperage = secresult.registers[1] / 100  # Ток
-            power = (secresult.registers[2] + secresult.registers[3] << 16) / 10  # Мощность
+            power = (secresult.registers[2] + secresult.registers[3] * 65536) / 10  # Мощность
             print("The Second client", "ID device = ", secondlidslave[id])  # Вывод опрашиваемого датчика
             print("PZEM Voltage:\t" + str(voltage) + "V")  # Значения(Вывод для отладки)
             print("PZEM Amperage:\t" + str(amperage) + "A")
@@ -162,10 +162,10 @@ while True:
             TotalWorkDays = thirdresult.registers[21]                                                               # Общее количество дней работы
             Numberofbatteryoverdischarges = thirdresult.registers[22]                                               # Общее количество разрядов аккумуляторов
             Numberofbatteryfullcharges = thirdresult.registers[23]                                                  # Общее количество зарядов аккумуляторов
-            TotalchargingAmpHrs = (thirdresult.registers[24] << 16 + thirdresult.registers[25])                     # Общее время зарядки аккумулятора в амперах-часах
-            TotaldischargingAmpHrs = (thirdresult.registers[26] << 16 + thirdresult.registers[27])                  # Общее время разрядки аккумуляторов в амперах-часах
-            CumulPowerGener = (thirdresult.registers[28] << 16 + thirdresult.registers[29])                         # Совокупная выработка электроэнергии
-            CumulPowerConsumption = (thirdresult.registers[30] << 16 + thirdresult.registers[31])                   # Совокупное энергопотребление
+            TotalchargingAmpHrs = (thirdresult.registers[24] * 65536 + thirdresult.registers[25])                     # Общее время зарядки аккумулятора в амперах-часах
+            TotaldischargingAmpHrs = (thirdresult.registers[26] * 65536 + thirdresult.registers[27])                  # Общее время разрядки аккумуляторов в амперах-часах
+            CumulPowerGener = (thirdresult.registers[28] * 65536 + thirdresult.registers[29])                         # Совокупная выработка электроэнергии
+            CumulPowerConsumption = (thirdresult.registers[30] * 65536 + thirdresult.registers[31])                   # Совокупное энергопотребление
 
             print("The Third client", "ID device = ", ThirdNameSlave[id])  # Номер устройства
             # Динамическая информация контроллера(Вывод для отладки)
@@ -195,19 +195,19 @@ while True:
             print("Maximum Load Discharge Current:\t" + str(MaxDischargingCurrentofCurrentDay) + "A")
             print("Maximum Load Discharge Power:\t" + str(MaxDischargingPowerofCurrentDay) + "W")
             print("Charge Amp Hours:\t\t" + str(ChargingAmpofCurrentDay) + "Ah")
-            print("Charge Power:\t\t\t" + str(PowerGenerationofCurrentDay) + "KWh")
+            print("Charge Power:\t\t\t" + str(PowerGenerationofCurrentDay) + "Wh")
             print("Load Amp Hours:\t\t\t" + str(DisChargingAmpofCurrentDay) + "Ah")
-            print("Load Power:\t\t\t" + str(MaxDischargingPowerofCurrentDay) + "KWh")
+            print("Load Power:\t\t\t" + str(MaxDischargingPowerofCurrentDay) + "Wh")
 
             # Данные за длительный период времени(Вывод для отладки)
             print("-------------- GLOBAL DATA ---------------")
             print("Days Operational:\t\t" + str(TotalWorkDays) + " Days")
             print("Times Over Discharged:\t\t" + str(Numberofbatteryoverdischarges))
             print("Times Fully Charged:\t\t" + str(Numberofbatteryfullcharges))
-            print("Cumulative Amp Hours:\t\t" + str(TotalchargingAmpHrs) + "KAh")
-            print("Cumulative Power:\t\t" + str(CumulPowerGener) + "KWh")
-            print("Load Amp Hours:\t\t\t" + str(TotaldischargingAmpHrs) + "KAh")
-            print("Load Power:\t\t\t" + str(CumulPowerConsumption) + "KWh")
+            print("Cumulative Amp Hours:\t\t" + str(TotalchargingAmpHrs) + "Ah")
+            print("Cumulative Power:\t\t" + str(CumulPowerGener) + "Wh")
+            print("Load Amp Hours:\t\t\t" + str(TotaldischargingAmpHrs) + "Ah")
+            print("Load Power:\t\t\t" + str(CumulPowerConsumption) + "Wh")
             print("------------------------------------------")
 
             # Вывод неисправностей(Вывод для отладки)
