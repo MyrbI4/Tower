@@ -20,7 +20,7 @@ Thethirdclient = ModbusTcpClient('192.168.1.12', port=502, framer=ModbusRtuFrame
 while True:
     try:
         # Метеостанция '192.168.1.11', port=502
-        result = Thefirstclient.read_holding_registers(0x0050, 32, slave=firstidslave)          # Метеостанция регистры
+        result = Thefirstclient.read_holding_registers(50, 32, slave=firstidslave)          # Метеостанция регистры
         AverageTemp = (result.registers[0] + (result.registers[1] * 65536)) / 100                 # Температура средняя(ПТС)
         AveragePressure = (result.registers[2] + (result.registers[3] * 65536)) / 100             # Давление среднее
         Averagehumidity = (result.registers[4] + (result.registers[5] * 65536)) / 100             # Влажность средняя
