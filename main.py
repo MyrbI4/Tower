@@ -20,23 +20,54 @@ Thethirdclient = ModbusTcpClient('192.168.1.12', port=502, framer=ModbusRtuFrame
 while True:
     try:
         # Метеостанция '192.168.1.11', port=502
-        result = Thefirstclient.read_holding_registers(50, 32, slave=firstidslave)          # Метеостанция регистры
-        AverageTemp = (result.registers[0] + (result.registers[1] * 65536)) / 100                 # Температура средняя(ПТС)
-        AveragePressure = (result.registers[2] + (result.registers[3] * 65536)) / 100             # Давление среднее
-        Averagehumidity = (result.registers[4] + (result.registers[5] * 65536)) / 100             # Влажность средняя
-        AverageWindspeed = (result.registers[6] + (result.registers[7] * 65536)) / 100            # Скорость ветра средняя
-        AverageWinddirection = (result.registers[8] + (result.registers[9] * 65536)) / 100        # Направление ветра среднее
-        MaxWindspeed = (result.registers[10] + (result.registers[11] * 65536)) / 100              # Максимум скорости ветра
-        Recipitation = (result.registers[12] + (result.registers[13] * 65536)) / 100              # Осадки
-        CurrentTemp = (result.registers[14] + (result.registers[15] * 65536)) / 100               # Температура текущая(ПТС)
-        CurrentPressure = (result.registers[16] + (result.registers[17] * 65536)) / 100           # Давление текущее
-        CurrentRecipitation = (result.registers[18] + (result.registers[19] * 65536)) / 100       # Влажность текущая
-        CurrentWindspeed = (result.registers[20] + (result.registers[21] * 65536)) / 100          # Скорость ветра текущая
-        CurrentWinddirection = (result.registers[22] + (result.registers[23] * 65536)) / 100      # Направление ветра текущее
-        QuartzTemp = (result.registers[24] + (result.registers[25] * 65536)) / 100                # Температура кварца
-        HumiditySensorTemp = (result.registers[26] + (result.registers[27] * 65536)) / 100        # Температура датчика влажности
-        CodeTemp = (result.registers[28] + (result.registers[29] * 65536)) / 100                  # Код температуры
-        QuartzFreq = (result.registers[30] + (result.registers[31] * 65536)) / 100                # Частота кварца
+        result = Thefirstclient.read_holding_registers(50, 2, slave=1)  # Метеостанция регистры(Ввел декодирование 32 бит согласно даташиту на метеостанцию(Данные передаются старшим байтом вперёд(1→0→3→2))
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        AverageTemp = decoder.decode_32bit_float()                      # Температура средняя(ПТС)
+        result = Thefirstclient.read_holding_registers(52, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        AveragePressure = decoder.decode_32bit_float()                   # Давление среднее
+        result = Thefirstclient.read_holding_registers(54, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        Averagehumidity = decoder.decode_32bit_float()                   # Влажность средняя
+        result = Thefirstclient.read_holding_registers(56, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        AverageWindspeed = decoder.decode_32bit_float()                  # Скорость ветра средняя
+        result = Thefirstclient.read_holding_registers(58, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        AverageWinddirection = decoder.decode_32bit_float()             # Направление ветра среднее
+        result = Thefirstclient.read_holding_registers(60, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        MaxWindspeed = decoder.decode_32bit_float()                     # Максимум скорости ветра
+        result = Thefirstclient.read_holding_registers(62, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        Recipitation = decoder.decode_32bit_float()                     # Осадки
+        result = Thefirstclient.read_holding_registers(64, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CurrentTemp = decoder.decode_32bit_float()                      # Температура текущая(ПТС)
+        result = Thefirstclient.read_holding_registers(66, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CurrentPressure = decoder.decode_32bit_float()                  # Давление текущее
+        result = Thefirstclient.read_holding_registers(68, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CurrentRecipitation = decoder.decode_32bit_float()              # Влажность текущая
+        result = Thefirstclient.read_holding_registers(70, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CurrentWindspeed = decoder.decode_32bit_float()                 # Скорость ветра текущая
+        result = Thefirstclient.read_holding_registers(72, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CurrentWinddirection = decoder.decode_32bit_float()              # Направление ветра текущее
+        result = Thefirstclient.read_holding_registers(74, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        QuartzTemp = decoder.decode_32bit_float()                        # Температура кварца
+        result = Thefirstclient.read_holding_registers(76, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        HumiditySensorTemp = decoder.decode_32bit_float()               # Температура датчика влажности     
+        result = Thefirstclient.read_holding_registers(78, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        CodeTemp = decoder.decode_32bit_float()                         # Код температуры
+        result = Thefirstclient.read_holding_registers(80, 2, slave=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
+        QuartzFreq = decoder.decode_32bit_float()                       # Частота кварца
         print("The First client")                                                               # Для отладки
         print("Meteostation")
         print("AverageTemp:\t" + str(AverageTemp) + "°C")                                       # Для отладки вывод значений
