@@ -125,29 +125,20 @@ while True:
       "Battery undervoltage warning", #12
       "Battery overvoltage",          #13
       "Battery over-discharge"]		  #14 
+    chargeModes = [
+      "OFF",              #0
+      "NORMAL",           #1
+      "MPPT",             #2
+      "EQUALIZE",         #3
+      "BOOST",            #4
+      "FLOAT",            #5
+      "CURRENT_LIMITING"  #6
+     ]
     for id in range(len(thirdidslave)):                                                                         #Опрос контроллеров заряда
         try:
             thirdresult = Thethirdclient.read_holding_registers(256, 35, slave=thirdidslave[id])                # Снимаем регистры
-            modeoffset = 0  # Проверка режима зарядки
-            loadstatus = False
-            if (thirdresult.registers[32] > 6):
-                loadstatus = True
-                modeoffset = 32768
-                chargeMode = " "
-            if (thirdresult.registers[32] == 0 + modeoffset):
-                chargeMode = "OFF"
-            elif (thirdresult.registers[32] == 1 + modeoffset):
-                chargeMode = "Normal"
-            elif (thirdresult.registers[32] == 2 + modeoffset):
-                chargeMode = "MPPT"
-            elif (thirdresult.registers[32] == 3 + modeoffset):
-                chargeMode = "Equalizing"
-            elif (thirdresult.registers[32] == 4 + modeoffset):
-                chargeMode = "Boost"
-            elif (thirdresult.registers[32] == 5 + modeoffset):
-                chargeMode = "Floating mode"
-            elif (thirdresult.registers[32] == 6 + modeoffset):
-                chargeMode = "Current limiting"
+            modeoffset = 32768 if thirdresult.registers[32] > else 0                                            # Проверка режима зарядки
+            chargemode = chargeModes[thirdresult.registers[32]-modeoffset]
             faults = "None"  # Проверка ошибок работы контроллера заряда
             faultID = thirdresult.registers[34]
             if (faultID != 0):
@@ -201,7 +192,7 @@ while True:
             print("The Third client", "ID device = ", ThirdNameSlave[id])  # Номер устройства
             # Динамическая информация контроллера(Вывод для отладки)
             print("------------- Real Time Data -------------")
-            print("Charging Mode:\t\t\t" + str(chargeMode))
+            print("Charging Mode:\t\t\t" + chargeMode)
             print("Battery SOC:\t\t\t" + str(BatteryCap) + "%")
             print("Battery Voltage:\t\t" + str(BatteryVolt) + "V")
             print("Battery Charge Current:\t\t" + str(ChargingCurr) + "A")
