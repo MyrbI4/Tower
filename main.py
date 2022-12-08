@@ -1,4 +1,5 @@
 
+from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.client import ModbusTcpClient
 from pymodbus.transaction import ModbusRtuFramer
 import time
@@ -61,7 +62,7 @@ while True:
         QuartzTemp = decoder.decode_32bit_float()                        # Температура кварца
         result = Thefirstclient.read_holding_registers(76, 2, slave=1)
         decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
-        HumiditySensorTemp = decoder.decode_32bit_float()               # Температура датчика влажности     
+        HumiditySensorTemp = decoder.decode_32bit_float()               # Температура датчика влажности
         result = Thefirstclient.read_holding_registers(78, 2, slave=1)
         decoder = BinaryPayloadDecoder.fromRegisters(result.registers)
         CodeTemp = decoder.decode_32bit_float()                         # Код температуры
@@ -103,9 +104,9 @@ while True:
             print("PZEM Amperage:\t" + str(amperage) + "A")
             print("PZEM Power:\t" + str(power) + "W")
             time.sleep(2)                                                                              # Задержка,для протокола Modbus необходима 2-3 секунды между сообщениями иначе ошибка "Отстуствие ответа"(в симуляторе работает без нее,на прототипе нужна проверка)
-        except Exception as error:                                                                     # Обработка исключения(В случае поломки преобразователя выводит ошибку со всех устройств:) 
+        except Exception as error:                                                                     # Обработка исключения(В случае поломки преобразователя выводит ошибку со всех устройств:)
             print("IP: 192.168.1.12 Port: 503")
-            print("PZEM device:", "ID device", secondlidslave[id], "got problem")                 
+            print("PZEM device:", "ID device", secondlidslave[id], "got problem")
 
 
     #SRNE '192.168.1.12', port=502
@@ -124,7 +125,7 @@ while True:
       "Load short circuit",           #11
       "Battery undervoltage warning", #12
       "Battery overvoltage",          #13
-      "Battery over-discharge"]		  #14 
+      "Battery over-discharge"]		  #14
     chargeModes = [
       "OFF",              #0
       "NORMAL",           #1
@@ -137,7 +138,7 @@ while True:
     for id in range(len(thirdidslave)):                                                                         #Опрос контроллеров заряда
         try:
             thirdresult = Thethirdclient.read_holding_registers(256, 35, slave=thirdidslave[id])                # Снимаем регистры
-            modeoffset = 32768 if thirdresult.registers[32] > else 0                                            # Проверка режима зарядки
+            modeoffset = 32768 if thirdresult.registers[32] > 6 else 0                                            # Проверка режима зарядки
             chargemode = chargeModes[thirdresult.registers[32]-modeoffset]
             faults = "None"  # Проверка ошибок работы контроллера заряда
             faultID = thirdresult.registers[34]
@@ -192,7 +193,7 @@ while True:
             print("The Third client", "ID device = ", ThirdNameSlave[id])  # Номер устройства
             # Динамическая информация контроллера(Вывод для отладки)
             print("------------- Real Time Data -------------")
-            print("Charging Mode:\t\t\t" + chargeMode)
+            print("Charging Mode:\t\t\t" + chargemode)
             print("Battery SOC:\t\t\t" + str(BatteryCap) + "%")
             print("Battery Voltage:\t\t" + str(BatteryVolt) + "V")
             print("Battery Charge Current:\t\t" + str(ChargingCurr) + "A")
@@ -237,6 +238,6 @@ while True:
             print(faults)
             print("------------------------------------------")
             time.sleep(2)                                             # Задержка,для протокола Modbus необходима 2-3 секунды между сообщениями иначе ошибка "Отстуствие ответа"(в симуляторе работает без нее,на прототипе нужна проверка)
-        except Exception as error:                                    # Обработка исключения(В случае поломки преобразователя выводит ошибку со всех устройств:) 
+        except Exception as error:                                    # Обработка исключения(В случае поломки преобразователя выводит ошибку со всех устройств:)
             print("IP: 192.168.1.12 Port:502")
             print("SRNE device:", "ID device", thirdidslave[id], "got problem")
