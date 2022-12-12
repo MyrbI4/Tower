@@ -10,9 +10,9 @@ def getRealTemp(temp):      #Функция для SRNE перевода тем�
 #ID устройств
 
 firstidslave = 1
-secondlidslave = [1, 2]
-thirdidslave = [1, 5, 6, 7, 11, 12]
-ThirdNameSlave = ["1-1", "1-5", "1-6", "2-1", "2-5","2-6"]
+secondlidslave = [1, 2, 3, 4]
+thirdidslave = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+ThirdNameSlave = ["1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "2-1", "2-2", "2-3", "2-4", "2-5", "2-6"]
 
 #IP адреса преобразователей протокола Modbus RTU/ASCII в Modbus TCP
 Thefirstclient = ModbusTcpClient('192.168.1.11', port=502, framer=ModbusRtuFramer)             #Метеостанция
@@ -138,8 +138,26 @@ while True:
     for id in range(len(thirdidslave)):                                                                         #Опрос контроллеров заряда
         try:
             thirdresult = Thethirdclient.read_holding_registers(256, 35, slave=thirdidslave[id])                # Снимаем регистры
-            modeoffset = 32768 if thirdresult.registers[32] > 6 else 0                                            # Проверка режима зарядки
-            chargemode = chargeModes[thirdresult.registers[32]-modeoffset]
+            modeoffset = 0  # Проверка режима зарядки
+            loadstatus = False
+            if (thirdresult.registers[32] > 6):
+                loadstatus = True
+                modeoffset = 32768
+                chargeMode = " "
+            if (thirdresult.registers[32] == 0 + modeoffset):
+                chargeMode = "OFF"
+            elif (thirdresult.registers[32] == 1 + modeoffset):
+                  chargeMode = "Normal"
+            elif (thirdresult.registers[32] == 2 + modeoffset):
+                  chargeMode = "MPPT"
+            elif (thirdresult.registers[32] == 3 + modeoffset):
+                  chargeMode = "Equalizing"
+            elif (thirdresult.registers[32] == 4 + modeoffset):
+                  chargeMode = "Boost"
+            elif (thirdresult.registers[32] == 5 + modeoffset):
+                  chargeMode = "Floating mode"
+            elif (thirdresult.registers[32] == 6 + modeoffset):
+                  chargeMode = "Current limiting"
             faults = "None"  # Проверка ошибок работы контроллера заряда
             faultID = thirdresult.registers[34]
             if (faultID != 0):
@@ -193,7 +211,7 @@ while True:
             print("The Third client", "ID device = ", ThirdNameSlave[id])  # Номер устройства
             # Динамическая информация контроллера(Вывод для отладки)
             print("------------- Real Time Data -------------")
-            print("Charging Mode:\t\t\t" + chargemode)
+            print("Charging Mode:\t\t\t" + chargeMode)
             print("Battery SOC:\t\t\t" + str(BatteryCap) + "%")
             print("Battery Voltage:\t\t" + str(BatteryVolt) + "V")
             print("Battery Charge Current:\t\t" + str(ChargingCurr) + "A")
@@ -220,7 +238,7 @@ while True:
             print("Charge Amp Hours:\t\t" + str(ChargingAmpofCurrentDay) + "Ah")
             print("Charge Power:\t\t\t" + str(PowerGenerationofCurrentDay) + "Wh")
             print("Load Amp Hours:\t\t\t" + str(DisChargingAmpofCurrentDay) + "Ah")
-            print("Load Power:\t\t\t" + str(MaxDischargingPowerofCurrentDay) + "Wh")
+            print("Load Power:\t\t\t" + str(PowerConsumptionofCurrentDay) + "Wh")
 
             # Данные за длительный период времени(Вывод для отладки)
             print("-------------- GLOBAL DATA ---------------")
