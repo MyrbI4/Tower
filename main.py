@@ -98,7 +98,7 @@ while True:
             secresult = Thesecondclient.read_input_registers(0x0000, 6, slave=secondlidslave[id])      # Считываем регистры
             voltage = secresult.registers[0] / 100  # Напряжение
             amperage = secresult.registers[1] / 100  # Ток
-            power = (secresult.registers[2] + secresult.registers[3] * 65536) / 10  # Мощность
+            power = (secresult.registers[3] + secresult.registers[2] * 65536) / 10  # Мощность
             print("The Second client", "ID device = ", secondlidslave[id])  # Вывод опрашиваемого датчика
             print("PZEM Voltage:\t" + str(voltage) + "V")  # Значения(Вывод для отладки)
             print("PZEM Amperage:\t" + str(amperage) + "A")
